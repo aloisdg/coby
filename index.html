@@ -1,0 +1,47 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coby</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+
+    <style>
+        pre>code {
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Coby</h1>
+        <h2>Quickly add co-authors to your commit. Great for pairing and excellent for sending a little love/credit to
+            that special someone who helped fix that gnarly bug of yours.</h2>
+    </header>
+    <textarea name="logins" id="loginsArea">
+aloisdg
+abeltay
+</textarea>
+
+    <pre><code>
+</code></pre>
+
+    <script>
+        const distinct = source => [...new Set(source)]
+
+        const format = data => `Co-authored-by: ${data.name} <${data.id}+${data.login}@users.noreply.github.com>`
+
+        const logins = distinct(document.querySelector("#loginsArea").value.match(/^([\w\-]+)/gm))
+        logins.forEach(login => {
+            fetch(`https://api.github.com/users/${login}`)
+                .then(x => x.json())
+                .then(x => document.querySelector("code").textContent += "\n" + format(x))
+
+        });
+    </script>
+
+</body>
+
+</html>

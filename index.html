@@ -11,35 +11,76 @@
         pre>code {
             font-size: 1.3em;
         }
+
+        button {
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
     <header>
         <h1>Coby</h1>
-        <h2>Quickly add co-authors to your commit. Great for pairing and excellent for sending a little love/credit to
-            that special someone who helped fix that gnarly bug of yours.</h2>
+        <p>Quickly add co-authors to your commit. Great for pairing and excellent for sending a little love/credit to
+            that special someone who helped fix that gnarly bug of yours.</p>
     </header>
-    <textarea name="logins" id="loginsArea">
+    <textarea name="logins">
 aloisdg
-abeltay
+torendil
 </textarea>
 
-    <pre><code>
+    <button type="button" id="generate">Generate authors</button>
+
+    <pre tabindex="0"><code>
 </code></pre>
 
+    <button type="button" id="copy">Copy</button>
+
+    <footer>made by @aloisdg</footer>
     <script>
+        const _code = document.querySelector("code");
+        const _area = document.querySelector("textarea");
+
         const distinct = source => [...new Set(source)]
 
-        const format = data => `Co-authored-by: ${data.name} <${data.id}+${data.login}@users.noreply.github.com>`
+        // Note that name can be null (e.g. torendil)
+        const format = ({ name, login, id }) => `Co-authored-by: ${name ?? login} <${id}+${login}@users.noreply.github.com>`
 
-        const logins = distinct(document.querySelector("#loginsArea").value.match(/^([\w\-]+)/gm))
-        logins.forEach(login => {
+        const fetchUser = login => {
             fetch(`https://api.github.com/users/${login}`)
                 .then(x => x.json())
-                .then(x => document.querySelector("code").textContent += "\n" + format(x))
+                .then(x => _code.textContent += "\n" + format(x))
+        }
 
-        });
+        const main = () => {
+            _code.textContent = ""
+            const logins = _area.value.match(/^([\w\-]+)/gm)
+            distinct(logins)
+                .forEach(fetchUser)
+        }
+
+        const copy = () => {
+            if (_code.textContent.trim().length === 0) {
+                // in this case copy should be disable
+                console.log("nothing to do")
+                return
+            }
+            const text = _code.textContent
+            navigator.clipboard.writeText(text).then(
+                () => console.log("clipboard successfully set"),
+                () => console.error("clipboard write failed")
+            )
+        }
+
+        document.querySelector('#generate').onclick = main;
+        document.querySelector('#copy').onclick = copy;
+
+        main();
     </script>
 
 </body>

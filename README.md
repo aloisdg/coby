@@ -27,6 +27,12 @@ You can do it by hand or rely on [Coby](https://aloisdg.github.io/coby/):
 
 During the Hacktoberfest it is common to have reviewers helping a lot. Since the event seems to forget how their contributions are important to the well being of the project, you can define them as co-author. Happy coding!
 
+## Topics
+
+![image](https://user-images.githubusercontent.com/3449303/198955083-688aa2e7-6774-4f97-808c-5785c6ea4c06.png)
+
+[source](https://www.reddit.com/r/programming/comments/yg9cpw/twitter_engineers_asked_to_print_out_their_last/iu85hmy/)
+
 ## License
 
 [AGPL](./LICENSE)
